@@ -16,7 +16,7 @@ st.markdown(
     """
     <style>
     .stApp {
-        background-image: url("D:\Intership\Proj-03 Digital-Product Analytics\data\background.png");  /* replace with your image URL */
+        background-image: url("Data\background.png");  /* replace with your image URL */
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;

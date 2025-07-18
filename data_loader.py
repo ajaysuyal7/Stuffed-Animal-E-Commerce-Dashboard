@@ -1,13 +1,13 @@
 import streamlit as st
 import pandas as pd
+import os
 
-data_path = r"D:\Intership\Proj-03 Digital-Product Analytics\data\\"
 # Sql server connection function
 # cache connection to the database to avoid slow reloads
 
 @st.cache_data
 def load_csv(filename):
-    return pd.read_csv(data_path + filename)
+    return pd.read_csv(os.path.join("Data", filename))
 
 def load_all_data():
     orders = load_csv("orders360.csv")
