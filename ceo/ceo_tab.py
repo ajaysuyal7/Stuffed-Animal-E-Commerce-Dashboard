@@ -113,8 +113,8 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
             st.subheader("📈 Gross Revenue by Year & Month")
             df["year_month"] = pd.to_datetime(df["order_date"]).dt.to_period("M").astype(str)
             monthly_rev = df.groupby("year_month")["price_usd"].sum().reset_index()
-            fig5 = px.area(monthly_rev, x="year_month", y="price_usd", text="price_usd")
-            fig5.update_traces(mode="lines+markers+text", textposition="top center")
+            fig5 = px.area(monthly_rev, x="year_month", y="price_usd")
+            fig5.update_traces(mode="lines+markers")
             st.plotly_chart(fig5, use_container_width=True)
 
         with col6:
@@ -125,7 +125,7 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
             # Melt the data for easier plotting with labels
             rev_cogs_melted = rev_cogs.melt(id_vars="year_month", value_vars=["price_usd", "cogs_usd"],
                                             var_name="Metric", value_name="Amount")
-            fig6 = px.line(rev_cogs_melted, x="year_month", y="Amount", color="Metric", markers=True, text="Amount")
+            fig6 = px.line(rev_cogs_melted, x="year_month", y="Amount", color="Metric", markers=True)
             st.plotly_chart(fig6, use_container_width=True)
 
         #chart 7: Net revenue by Quater

@@ -2,7 +2,6 @@ streamlit
 pandas
 numpy
 plotly
-sklearn
+scikit-learn
 seaborn
 matplotlib
-os

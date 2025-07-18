@@ -138,16 +138,13 @@ def render_marketing_dashboard(order_data,website_sessions,website_pageviews):
 
     with tab5:
         st.title("📦 Product Performance Dashboard")
+        # Assume filtered_order_data is passed or available
+        fig1 = line_column_revenue_orders_by_product(filtered_order_data)
+        st.plotly_chart(fig1, use_container_width=True)
 
-        col1,col2=st.columns(2)
-        with col1:
-            # Assume filtered_order_data is passed or available
-            fig1 = line_column_revenue_orders_by_product(filtered_order_data)
-            st.plotly_chart(fig1, use_container_width=True)
-        with col2:
-            fig2 = donut_units_sold_by_product(filtered_order_data)
-            st.plotly_chart(fig2, use_container_width=True)
+        fig2 = donut_units_sold_by_product(filtered_order_data)
+        st.plotly_chart(fig2, use_container_width=True)
 
-            st.markdown("---")
-        fig4 = bar_refunds_by_product(filtered_order_data)
-        st.plotly_chart(fig4, use_container_width=True)
+       
+        fig3 = bar_refunds_by_product(filtered_order_data)
+        st.plotly_chart(fig3, use_container_width=True)
