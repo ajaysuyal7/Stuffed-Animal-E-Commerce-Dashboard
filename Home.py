@@ -39,6 +39,3 @@ def show_home():
     - Marketing Director
     - Investor Dashboard
     """)
-
-    st.balloons()
-
