@@ -4,6 +4,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 import pandas as pd
 
+def human_format(num):
+    if num >= 1_000_000:
+        return f"{num/1_000_000:.2f}M"
+    elif num >= 1_000:
+        return f"{num/1_000:.2f}K"
+    else:
+        return str(num)
+
 
 def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, website_session):
     st.title("📊 CEO Dashboard")
@@ -51,10 +59,10 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
     with tab1:
         st.subheader("📊 Business Overview")
         k1, k2, k3, k4 = st.columns(4)
-        k1.metric("🧑‍🤝‍🧑 Total Customers", f"{total_customers:,}")
-        k2.metric("🛒 Total Orders", f"{total_orders:,}")
-        k3.metric("💵 Gross Revenue", f"${gross_rev:,.2f}")
-        k4.metric("🌐 Total Sessions", f"{total_sessions:,}")
+        k1.metric("🧑‍🤝‍🧑 Total Customers", human_format(total_customers))
+        k2.metric("🛒 Total Orders", human_format(total_orders))
+        k3.metric("💵 Gross Revenue", f"${human_format(gross_rev)}")
+        k4.metric("🌐 Total Sessions", human_format(total_sessions))
 
         col1,col2=st.columns(2)
         with col1:
@@ -102,9 +110,9 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
     with tab2:
         st.subheader("💰 Revenue & Profitability")
         k5, k6, k7, k8 = st.columns(4)
-        k5.metric("📈 Net Revenue", f"${net_rev:,.2f}")
-        k6.metric("💰 Gross Profit", f"${gross_profit:,.2f}")
-        k7.metric("💹 Net Profit", f"${net_profit:,.2f}")
+        k5.metric("📈 Net Revenue", f"${human_format(net_rev)}")
+        k6.metric("💰 Gross Profit", f"${human_format(gross_profit)}")
+        k7.metric("💹 Net Profit", f"${human_format(net_profit)}")
         k8.metric("🧾 Average Order Value (AOV)", f"${avg_order_value:,.2f}")
 
         col5, col6 =st.columns(2)
@@ -139,11 +147,10 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
     # Engagement & refunds Tab
     with tab3:
         st.subheader("📉 Engagement & Refunds")
-        c1, c2, c3, c4 = st.columns(4)
+        c1, c2, c3, = st.columns(3)
         c1.metric("🔁 Total Refunds", f"{refunds_total:,}")
-        c2.metric("🔁 Total Refunds", f"{refunds_total:,}")
-        c3.metric("📥 Conversion Rate", f"{conversion_rate:.2f}%")
-        c4.metric("📉 Bounce Rate", f"{bounce_rate:.2f}%")
+        c2.metric("📥 Conversion Rate", f"{conversion_rate:.2f}%")
+        c3.metric("📉 Bounce Rate", f"{bounce_rate:.2f}%")
 
         col9,col10=st.columns(2)
         with col9:
@@ -192,5 +199,4 @@ def render_ceo_dashboard(orders, order_items, refunds, products, pageviews, webs
         ))
         st.plotly_chart(fig11, use_container_width=True)
 
-    st.balloons()
 

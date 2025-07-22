@@ -3,6 +3,14 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
+def human_format(num):
+    if num >= 1_000_000:
+        return f"{num/1_000_000:.2f}M"
+    elif num >= 1_000:
+        return f"{num/1_000:.2f}K"
+    else:
+        return str(num)
+
 def render_investor_dashboard(website_sessions, orders, pageviews):
     st.title("📈 Investor Dashboard")
 
@@ -21,9 +29,9 @@ def render_investor_dashboard(website_sessions, orders, pageviews):
     with tab1:
         st.subheader("📌 Key Business KPIs")
         col1, col2, col3 = st.columns(3)
-        col1.metric("🧾 Total Orders", f"{orders['order_id'].nunique():,}")
-        col2.metric("👥 Unique Customers", f"{orders['user_id'].nunique():,}")
-        col3.metric("📈 Active Months", f"{orders['year_month'].nunique()}")
+        col1.metric("🧾 Total Orders", human_format(orders['order_id'].nunique()))
+        col2.metric("👥 Unique Customers", human_format(orders['user_id'].nunique()))
+        col3.metric("📈 Active Months", human_format(orders['year_month'].nunique()))
 
         st.markdown("### 📊 Orders Trend Over Time")
         monthly_orders = orders.groupby("year_month")["order_id"].nunique().reset_index()
@@ -60,10 +68,10 @@ def render_investor_dashboard(website_sessions, orders, pageviews):
     with tab2:
         st.subheader("📌 Revenue KPIs")
         col1, col2, col3,col4 = st.columns(4)
-        col1.metric("💰 Gross Revenue", f"${orders['price_usd'].sum():,.0f}")
-        col2.metric("💸 Net Revenue", f"${(orders['price_usd'] - orders['cogs_usd']).sum():,.0f}")
-        col3.metric("📊 Total COGS", f"${orders['cogs_usd'].sum():,.0f}")  
-        col4.metric("Average Order Value", f"${avg_order_value:,.2f}")
+        col1.metric("💰 Gross Revenue", f"${human_format(orders['price_usd'].sum())}")
+        col2.metric("💸 Net Revenue", f"${human_format((orders['price_usd'] - orders['cogs_usd']).sum())}")
+        col3.metric("📊 Total COGS", f"${human_format(orders['cogs_usd'].sum())}")  
+        col4.metric("Average Order Value", f"${avg_order_value:.2f}")
 
         st.markdown("### 📈 Gross Revenue Over Time")
         monthly_rev = orders.groupby("year_month")["price_usd"].sum().reset_index()
@@ -91,8 +99,8 @@ def render_investor_dashboard(website_sessions, orders, pageviews):
     with tab3:
         st.subheader("📌 Traffic KPIs")
         col1, col2, col3 = st.columns(3)
-        col1.metric("🌐 Total Sessions", f"{sessions['website_session_id'].nunique():,}")
-        col2.metric("📉 Bounce Sessions", f"{(pageviews.groupby('website_session_id').size() == 1).sum():,}")
+        col1.metric("🌐 Total Sessions", human_format(sessions['website_session_id'].nunique()))
+        col2.metric("📉 Bounce Sessions", human_format((pageviews.groupby('website_session_id').size() == 1).sum()))
         conversion_rate = (orders["user_id"].nunique() / sessions["user_id"].nunique()) * 100
         col3.metric("🔁 Conversion Rate", f"{conversion_rate:.2f}%")
 
@@ -124,5 +132,3 @@ def render_investor_dashboard(website_sessions, orders, pageviews):
         monthly_sessions = sessions.groupby("year_month")["website_session_id"].nunique().reset_index()
         fig10 = px.line(monthly_sessions, x="year_month", y="website_session_id")
         st.plotly_chart(fig10, use_container_width=True)
-
-    st.balloons()

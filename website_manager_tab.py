@@ -104,7 +104,7 @@ def render_website_manager_dashboard(website_session, webpage_view,orders):
                 
                 col1.metric("Total Users", human_format(total_users)if pd.notnull(total_users) else "N/A")
                 col2.metric("Avg. Session Duration (min)", round(avg_duration) if pd.notnull(avg_duration) else "N/A")
-                col3.metric("Bounce Rate (%)", round(bounce_rate, 2)if pd.notnull(bounce_rate) else "N/A")
+                col3.metric("Bounce Rate (%)", f"{round(bounce_rate, 2)}%"if pd.notnull(bounce_rate) else "N/A")
                 col4.metric("Unique Visitor", unique_visitor if pd.notnull(unique_visitor) else "N/A")
                 col5.metric("Returning Visitor ", repeat_user if pd.notnull(repeat_user) else "N/A")
 
@@ -164,14 +164,13 @@ def render_website_manager_dashboard(website_session, webpage_view,orders):
                 ]
 
 
-                col1,col2,col3,col4,col5 = st.columns(5)
+                col1,col2,col3,col4 = st.columns(4)
 
                 col1.metric("Total Page Views", human_format(filtered_pageview['website_pageview_id'].nunique()))
                 col2.metric("Unique Page Views", human_format(filtered_pageview['website_session_id'].nunique()))
                 #col3.metric("conversion")
-                col3.metric("conversion Rate (%)", round(conversion_rate,2))
-                col4.metric("Avg. Bounce Rate (%)", round((filtered_website_session['is_bounce'].mean() * 100), 2))
-                col5.metric("Avg. page views ", round(avg_page_views)if pd.notnull(avg_page_views) else "N/A")
+                col3.metric("conversion Rate (%)", f"{round(conversion_rate,2)}%")
+                col4.metric("Avg. page views ", round(avg_page_views)if pd.notnull(avg_page_views) else "N/A")
 
                 col7,col8 = st.columns(2)
 
@@ -302,5 +301,3 @@ def render_website_manager_dashboard(website_session, webpage_view,orders):
     else:
         st.warning("No data found")
         st.stop()
-
-    st.balloons()

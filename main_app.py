@@ -9,8 +9,6 @@ from Home import show_home
 import streamlit as st
 
 
-import streamlit as st
-
 # 💡 GLOBAL BACKGROUND IMAGE
 st.markdown(
     """
@@ -26,6 +24,19 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+
+# laod Data
+orders, order_items, refunds, products, web_pageview, website_session, customers = load_all_data()
+
+# Store data with original names (no renaming in session_state)
+st.session_state.website_sessions = website_session
+st.session_state.web_pageview = web_pageview
+st.session_state.orders = orders
+st.session_state.order_items = order_items
+st.session_state.products = products
+st.session_state.customers = customers
+st.session_state.refunds = refunds
 
 
 # Set up the Streamlit page configuration
@@ -50,18 +61,6 @@ def main():
                 st.session_state.clear()
                 st.success("Logged out. Please reload to log in again.")
                 st.stop()
-
-        # laod Data
-        orders, order_items, refunds, products, web_pageview, website_session, customers = load_all_data()
-
-        # Store data with original names (no renaming in session_state)
-        st.session_state.website_sessions = website_session
-        st.session_state.web_pageview = web_pageview
-        st.session_state.orders = orders
-        st.session_state.order_items = order_items
-        st.session_state.products = products
-        st.session_state.customers = customers
-        st.session_state.refunds = refunds
 
         #Navigation
         menu = st.sidebar.selectbox("Go to", ["Home", "CEO Dashboard", "Marketing Director", "Website Manager", "Investor Dashboard"])

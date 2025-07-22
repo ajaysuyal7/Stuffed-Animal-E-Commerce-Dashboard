@@ -23,6 +23,14 @@ from .visuals import (
     donut_units_sold_by_product,
     bar_refunds_by_product
 )
+def human_format(num):
+    if num >= 1_000_000:
+        return f"{num/1_000_000:.2f}M"
+    elif num >= 1_000:
+        return f"{num/1_000:.2f}K"
+    else:
+        return str(num)
+
 
 def render_marketing_dashboard(order_data,website_sessions,website_pageviews):
     st.title("📢 Marketing Director Dashboard")
@@ -46,8 +54,8 @@ def render_marketing_dashboard(order_data,website_sessions,website_pageviews):
     with tab1:
 
         col1, col2, col3 = st.columns(3)
-        col1.metric("🧾 Total Orders", f"{kpis['total_orders']:,}")
-        col2.metric("💰 Gross Revenue", f"${kpis['gross_revenue']:,.0f}")
+        col1.metric("🧾 Total Orders", f"{human_format(kpis['total_orders'])}")
+        col2.metric("💰 Gross Revenue", f"${human_format(kpis['gross_revenue'])}")
         col3.metric("📈 Gross Profit %", f"{kpis['gross_profit_pct']:.2f}%")
         
         st.subheader("Conversion Rate Over Time")
@@ -68,9 +76,9 @@ def render_marketing_dashboard(order_data,website_sessions,website_pageviews):
 
     with tab2:
         col4, col5, col6 = st.columns(3)
-        col4.metric("🎯 Conversion Rate", f"{kpis['conversion_rate_pct']:.2f}%")
-        col5.metric("🕒 Avg. Session Duration (min)", f"{kpis['avg_user_session_duration_min']:.2f}")
-        col6.metric("❌ Bounce Rate", f"{kpis['bounce_rate_pct']:.2f}%")
+        col4.metric("🎯 Conversion Rate", f"{kpis['conversion_rate_pct']}%")
+        col5.metric("🕒 Avg. Session Duration (min)", kpis['avg_user_session_duration_min'])
+        col6.metric("❌ Bounce Rate", f"{kpis['bounce_rate_pct']}%")
         
         # Precomputed once at app start
         st.markdown("## 📈 Line + Column Chart – Avg Session Time & Count of sessions by session_path")

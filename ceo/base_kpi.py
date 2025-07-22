@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 
 
+
 def calculate_kpis(order_data, website_sessions, website_pageviews):
     kpis = {}
 
@@ -16,7 +17,7 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
 
     try:
         kpis["total_buyers"] = order_data["user_id"].nunique()
-        kpis["sessions_per_buyer"] = round(kpis["total_sessions"] / kpis["total_buyers"], 2)
+        kpis["sessions_per_buyer"] =round(kpis["total_sessions"] / kpis["total_buyers"], 2)
     except ZeroDivisionError:
         st.warning("⚠️ Cannot calculate sessions per buyer due to zero buyers.")
         kpis["sessions_per_buyer"] = 0
@@ -30,7 +31,7 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
 
     # === 2. SALES & FINANCIAL KPIs ===
     kpis["total_orders"] = order_data["order_id"].nunique()
-    kpis["total_units_sold"] = order_data["items_purchased"].sum()
+    kpis["total_units_sold"] =order_data["items_purchased"].sum()
     kpis["total_refunds"] = (order_data["refund_amount_usd"]!=0).sum()
 
     gross_revenue = order_data["price_usd"].sum()
@@ -47,13 +48,13 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
     kpis["gross_profit"] = round(gross_profit, 2)
 
     try:
-        kpis["gross_profit_pct"] = round((gross_profit / net_revenue) * 100, 2)
+        kpis["gross_profit_pct"] = (round((gross_profit / net_revenue) * 100, 2))
     except ZeroDivisionError:
         st.warning("⚠️ Cannot calculate gross profit % due to zero net revenue.")
         kpis["gross_profit_pct"] = 0
 
     try:
-        kpis["refund_rate_pct"] = round((kpis["total_refunds"] / gross_revenue) * 100, 2)
+        kpis["refund_rate_pct"] =(round((kpis["total_refunds"] / gross_revenue) * 100, 2))
     except ZeroDivisionError:
         st.warning("⚠️ Cannot calculate refund rate % due to zero gross revenue.")
         kpis["refund_rate_pct"] = 0
@@ -61,8 +62,8 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
     # === 3. CONVERSION KPIs ===
     try:
         converted_sessions = order_data["website_session_id"].nunique()
-        kpis["converted_sessions"] = converted_sessions
-        kpis["conversion_rate_pct"] = round((converted_sessions / kpis["total_sessions"]) * 100, 2)
+        kpis["converted_sessions"] = (converted_sessions)
+        kpis["conversion_rate_pct"] =round((converted_sessions / kpis["total_sessions"]) * 100, 2)
     except ZeroDivisionError:
         st.warning("⚠️ Cannot calculate conversion rate due to zero total sessions.")
         kpis["conversion_rate_pct"] = 0
@@ -78,7 +79,7 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
             .sort_values(by="gross_revenue", ascending=False)
             .reset_index(drop=True)
         )
-        kpis["revenue_per_channel"] = revenue_per_channel
+        kpis["revenue_per_channel"] = (revenue_per_channel)
     except Exception as e:
         st.warning(f"⚠️ Error calculating revenue per channel: {e}")
         kpis["revenue_per_channel"] = pd.DataFrame()
@@ -97,15 +98,15 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
             (session_duration["session_end"] - session_duration["session_start"]).dt.total_seconds() / 60
         )
 
-        kpis["avg_user_session_duration_min"] = round(session_duration["session_duration_min"].mean(), 2)
+        kpis["avg_user_session_duration_min"] = (round(session_duration["session_duration_min"].mean(), 2))
 
         session_with_orders = order_data[["website_session_id"]].drop_duplicates()
         sessions_with_orders_durations = session_duration[
             session_duration["website_session_id"].isin(session_with_orders["website_session_id"])
         ]
-        kpis["avg_buyer_session_duration_min"] = round(
+        kpis["avg_buyer_session_duration_min"] = (round(
             sessions_with_orders_durations["session_duration_min"].mean(), 2
-        )
+        ))
     except Exception as e:
         st.warning(f"⚠️ Could not calculate session durations: {e}")
         kpis["avg_user_session_duration_min"] = 0
@@ -119,7 +120,7 @@ def calculate_kpis(order_data, website_sessions, website_pageviews):
         bounced_sessions = pageviews_per_session[pageviews_per_session["pageview_count"] == 1][
             "website_session_id"
         ].nunique()
-        kpis["bounce_rate_pct"] = round((bounced_sessions / kpis["total_sessions"]) * 100, 2)
+        kpis["bounce_rate_pct"] = (round((bounced_sessions / kpis["total_sessions"]) * 100, 2))
     except ZeroDivisionError:
         st.warning("⚠️ Cannot calculate bounce rate due to zero total sessions.")
         kpis["bounce_rate_pct"] = 0
