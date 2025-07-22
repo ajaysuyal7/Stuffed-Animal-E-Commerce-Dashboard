@@ -46,6 +46,8 @@ def rerun_app():
 
 def main():
     #st.set_page_config(page_title="Analytics Dashboard", layout="wide")
+    # laod Data
+    orders, order_items, refunds, products, web_pageview, website_session, customers = load_all_data()
     
     if "logged_in" not in st.session_state:
         st.session_state.logged_in = False
@@ -61,6 +63,16 @@ def main():
                 st.session_state.clear()
                 st.success("Logged out. Please reload to log in again.")
                 st.stop()
+
+
+        # Store data with original names (no renaming in session_state)
+        st.session_state.website_sessions = website_session
+        st.session_state.web_pageview = web_pageview
+        st.session_state.orders = orders
+        st.session_state.order_items = order_items
+        st.session_state.products = products
+        st.session_state.customers = customers
+        st.session_state.refunds = refunds
 
         #Navigation
         menu = st.sidebar.selectbox("Go to", ["Home", "CEO Dashboard", "Marketing Director", "Website Manager", "Investor Dashboard"])
